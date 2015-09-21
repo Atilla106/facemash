@@ -4,3 +4,4 @@ bower_components
 .tmp
 env
 __pycache__
+db.sqlite3
