@@ -1,0 +1,84 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="left-right">
+  <template>
+    <iron-a11y-keys target=[[target]] keys="left right" on-keys-pressed="_updatePressed"></iron-a11y-keys>
+    <iron-ajax method="POST" auto url=[[url]] body={{params}} last-response={{response}} debounce-duration="300" content-type="application/json"></iron-ajax>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    new Polymer({
+      is: 'left-right',
+
+      properties: {
+        _img1: {
+          type: String,
+          computed: '_setImg1(response)'
+        },
+        _img2: {
+          type: String,
+          computed: '_setImg2(response)'
+        },
+        img1: {
+          type: String,
+          notify: true,
+          computed: '_setUrl(_img1)'
+        },
+        img2: {
+          type: String,
+          notify: true,
+          computed: '_setUrl(_img2)'
+        },
+        target: {
+          type: Object,
+          value: function() {
+            return document.body;
+          }
+        },
+        params: {
+          type: String,
+          readOnly: true
+        },
+        response: {
+          type: Object,
+        },
+        url: {
+          type: String
+        }
+      },
+      _updatePressed: function (event) {
+        var winner = (event.detail.combo === 'left') ? this._img1 : this._img2;
+        var loser = (event.detail.combo === 'left') ? this._img2 : this._img1;
+
+        this._setParams(JSON.stringify({'winner': winner, 'loser': loser}));
+
+      },
+
+      _setParams: function (params) {
+        this.params = params;
+      },
+      _setImg1: function (response) {
+        return response.img1;
+      },
+      _setImg2: function (response) {
+        return response.img2;
+      },
+      _setUrl: function (id) {
+        return 'http://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-' + id + '.jpg';
+      }
+    });
+  })();
+  </script>
+</dom-module>

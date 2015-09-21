@@ -1,0 +1,26 @@
+sudo: false
+language: python
+python:
+  - 2.7
+  - 3.4
+install:
+  - pip install -r requirements.txt
+  - pip install pyflakes
+  - npm install -g npm@'>=3.3.3'
+  - npm install -g bower
+  - npm install && bower install
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+script:
+  - gulp jshint
+  - gulp test
+  - pyflakes server
+
+notifications:
+  slack: atilla-106:L4FkaXdTuwFuNrFFVM6PR7PE
+
+cache:
+  directories:
+    - node_modules
+    - bower_components
