@@ -13,8 +13,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="left-right">
   <template>
     <iron-a11y-keys target=[[target]] keys="left right" on-keys-pressed="_updatePressed"></iron-a11y-keys>
-    <iron-ajax method="POST" auto url=[[url]] body={{params}} last-response={{response}} debounce-duration="300" content-type="application/json"></iron-ajax>
-    <iron-ajax id="get" auto url=[[url]] last-response={{response}} debounce-duration="300"></iron-ajax>
+    <iron-ajax method="POST" auto url=[[url]] body={{params}} last-response={{response}} debounce-duration="300" content-type="application/json" with-credentials="true"></iron-ajax>
+    <iron-ajax id="get" auto url=[[url]] last-response={{response}} debounce-duration="300" with-credentials="true"></iron-ajax>
   </template>
   <script>
   (function() {

@@ -17,6 +17,19 @@ class Images(_Base):
     id = Column(Integer, primary_key=True)
     elo = Column(Integer, nullable=False, default=1000)
 
+class Matches(_Base):
+    __tablename__ = 'matches'
+
+    id = Column(Integer, primary_key=True)
+    user = Column(Integer, nullable=False)
+    winner = Column(Integer, nullable=False, default=1000)
+    loser = Column(Integer, nullable=False, default=1000)
+
+class Users(_Base):
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True)
+
 # Connect to database
 _engine = create_engine(_DATABASE, echo=_DEBUG, convert_unicode=True)
 _session_factory = sessionmaker(bind=_engine)
