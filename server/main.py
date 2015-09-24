@@ -3,12 +3,10 @@ import random
 
 from flask import Flask
 from flask import request
-from flask.ext.cors import CORS
 
 import models
 
-app = Flask(__name__)
-CORS(app)
+app = Flask(__name__, static_folder='../dist', static_path ='')
 
 def elo(winner_elo, loser_elo):
     D = min(400, max(-400, winner_elo - loser_elo))
@@ -44,6 +42,9 @@ def back():
     img1, img2 = get_random_images()
     return json.dumps({'img1': img1, 'img2': img2})
 
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
