@@ -27,8 +27,8 @@ class Matches(_Base):
 
     id = Column(Integer, primary_key=True)
     user = Column(Integer, ForeignKey(Users.id), nullable=False)
-    winner = Column(Integer, ForeignKey(Images.id), nullable=False, default=1000)
-    loser = Column(Integer, ForeignKey(Images.id), nullable=False, default=1000)
+    winner = Column(Integer, ForeignKey(Images.id), nullable=False)
+    loser = Column(Integer, ForeignKey(Images.id), nullable=False)
 
 
 
