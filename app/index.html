@@ -16,7 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="Polymer Starter Kit" />
-  <title>Polymer Starter Kit</title>
+  <title>FaceMash</title>
   <!-- Place favicon.ico in the `app/` directory -->
 
   <!-- Chrome for Android theme color -->
@@ -78,7 +78,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </paper-toolbar>
 
         <!-- Main Content -->
-        <div class="content layout horizontal">
+        <div class="content layout horizontal wrap">
 
           <script type="text/javascript">
             function _setUrl(id) {
@@ -86,15 +86,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
           </script>
 
-          <paper-material>
-            <iron-image src={{img1}} style='height: 100%; width: 100%;'  sizing="cover"></iron-image>
+          <paper-material onclick="document.getElementsByTagName('iron-a11y-keys')[0].fire('keys-pressed', {combo: 'left'})">
+            <iron-image src={{img1}} style='height: 100%; width: 100%; background-color: lightgray;' preload fade sizing="cover"></iron-image>
           </paper-material>
 
-          <paper-material>
-            <iron-image src={{img2}} style='height: 100%; width: 100%;'  sizing="cover"></iron-image>
+          <paper-material onclick="document.getElementsByTagName('iron-a11y-keys')[0].fire('keys-pressed', {combo: 'right'})">
+            <iron-image src={{img2}} style='height: 100%; width: 100%; background-color: lightgray;' preload fade sizing="cover"></iron-image>
           </paper-material>
 
-          <left-right url="http://localhost:5000/back" img1={{img1}} img2={{img2}}></left-right>
+          <left-right url="http://facemash.eisti.me/back" img1={{img1}} img2={{img2}}></left-right>
         </div>
       </paper-scroll-header-panel>
     </paper-drawer-panel>
