@@ -19,12 +19,9 @@ def elo(winner_elo, loser_elo):
 def update_score(winner, loser, user):
     winner = models.Session.query(models.Images).get(winner)
     loser = models.Session.query(models.Images).get(loser)
-    winner.elo, loser.elo = elo(winner.elo, loser.elo)
 
-    match = models.Matches()
-    match.user = user
-    match.winner = winner.id
-    match.loser = loser.id
+    winner.elo, loser.elo = elo(winner.elo, loser.elo)
+    match = models.Matches(user=user, winner=winner, loser=loser)
 
     models.Session.add_all([winner, loser, match])
     models.Session.commit()
