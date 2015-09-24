@@ -3,12 +3,10 @@ import random
 
 from flask import Flask
 from flask import request
-from flask.ext.cors import CORS
 
 import models
 
 app = Flask(__name__, static_folder='../dist', static_path ='')
-CORS(app)
 
 def elo(winner_elo, loser_elo):
     D = min(400, max(-400, winner_elo - loser_elo))
