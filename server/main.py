@@ -7,7 +7,7 @@ from flask.ext.cors import CORS
 
 import models
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../dist', static_path ='')
 CORS(app)
 
 def elo(winner_elo, loser_elo):
@@ -44,6 +44,9 @@ def back():
     img1, img2 = get_random_images()
     return json.dumps({'img1': img1, 'img2': img2})
 
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
