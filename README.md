@@ -1,5 +1,4 @@
-# facemash
-
+# facemash [![Build Status](https://travis-ci.org/Atilla106/facemash.svg?branch=master)](https://travis-ci.org/Atilla106/facemash)
 ## Introduction
 
 This a website whose main goal is to use Polymer (and sort wallpapers).
