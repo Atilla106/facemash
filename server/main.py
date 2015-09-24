@@ -2,7 +2,7 @@ import json
 import random
 
 from flask import Flask
-from flask import request
+from flask import request, make_response
 
 import models
 
@@ -16,11 +16,14 @@ def elo(winner_elo, loser_elo):
     loser_elo = loser_elo + K * (0 - p(-D))
     return winner_elo, loser_elo
 
-def update_score(winner, loser):
+def update_score(winner, loser, user):
     winner = models.Session.query(models.Images).get(winner)
     loser = models.Session.query(models.Images).get(loser)
+
     winner.elo, loser.elo = elo(winner.elo, loser.elo)
-    models.Session.add_all([winner, loser])
+    match = models.Matches(user=user, winner=winner, loser=loser)
+
+    models.Session.add_all([winner, loser, match])
     models.Session.commit()
 
 def get_random_images():
@@ -32,15 +35,25 @@ def get_random_images():
 
 @app.route('/back', methods=['GET', 'POST'])
 def back():
+    user_id = request.cookies.get('user_id')
+
+    if not user_id:
+        user = models.Users()
+        models.Session.add(user)
+        models.Session.commit()
+    else:
+        user = models.Session.query(models.Users).get(int(user_id))
+
     if request.method == 'POST' and request.json:
         winner = request.json.get('winner')
         loser = request.json.get('loser')
         if winner and loser:
-            update_score(winner, loser)
-        return ''
+            update_score(winner, loser, user.id)
 
     img1, img2 = get_random_images()
-    return json.dumps({'img1': img1, 'img2': img2})
+    response = make_response(json.dumps({'img1': img1, 'img2': img2}))
+    response.set_cookie('user_id', str(user.id))
+    return response
 
 @app.route('/')
 def index():
