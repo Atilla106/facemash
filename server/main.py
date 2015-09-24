@@ -5,7 +5,7 @@ from flask import Flask
 from flask import request
 from flask.ext.cors import CORS
 
-from models import *
+import models
 
 app = Flask(__name__)
 CORS(app)
@@ -19,16 +19,17 @@ def elo(winner_elo, loser_elo):
     return winner_elo, loser_elo
 
 def update_score(winner, loser):
-    winner = Session.query(Images).get(winner)
-    loser = Session.query(Images).get(loser)
+    winner = models.Session.query(models.Images).get(winner)
+    loser = models.Session.query(models.Images).get(loser)
     winner.elo, loser.elo = elo(winner.elo, loser.elo)
-    Session.add_all([winner, loser])
-    Session.commit()
+    models.Session.add_all([winner, loser])
+    models.Session.commit()
 
 def get_random_images():
-    count = Session.query(Images).count()
+    count = models.Session.query(models.Images).count()
     rand1, rand2 = random.randrange(0, count), random.randrange(0, count)
-    img1, img2 = Session.query(Images)[rand1], Session.query(Images)[rand2]
+    img1 = models.Session.query(models.Images)[rand1]
+    img2 = models.Session.query(models.Images)[rand2]
     return img1.id, img2.id
 
 @app.route('/back', methods=['GET', 'POST'])
