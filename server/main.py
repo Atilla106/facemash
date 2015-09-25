@@ -1,5 +1,6 @@
 import json
 import random
+import logging
 
 from flask import Flask
 from flask import request, make_response
@@ -7,6 +8,11 @@ from flask import request, make_response
 import models
 
 app = Flask(__name__, static_folder='../dist', static_path ='')
+
+if not app.debug:
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(logging.INFO)
+    app.logger.addHandler(stream_handler)
 
 def elo(winner_elo, loser_elo):
     D = min(400, max(-400, winner_elo - loser_elo))
@@ -60,4 +66,4 @@ def index():
     return app.send_static_file('index.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
