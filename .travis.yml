@@ -1,3 +1,4 @@
+sudo: false
 language: python
 python:
   - 2.7
@@ -18,3 +19,8 @@ script:
 
 notifications:
   slack: atilla-106:L4FkaXdTuwFuNrFFVM6PR7PE
+
+cache:
+  directories:
+    - node_modules
+    - bower_components
