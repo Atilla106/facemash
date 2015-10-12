@@ -7,12 +7,13 @@ from flask import request, make_response
 
 import models
 
-app = Flask(__name__, static_folder='../dist', static_path ='')
+app = Flask(__name__, static_folder='../dist', static_path='')
 
 if not app.debug:
     stream_handler = logging.StreamHandler()
     stream_handler.setLevel(logging.INFO)
     app.logger.addHandler(stream_handler)
+
 
 def elo(winner_elo, loser_elo):
     D = min(400, max(-400, winner_elo - loser_elo))
@@ -33,12 +34,14 @@ def update_score(winner, loser, userid):
     models.Session.add_all([winner, loser, match])
     models.Session.commit()
 
+
 def get_random_images():
     count = models.Session.query(models.Images).count()
     rand1, rand2 = random.randrange(0, count), random.randrange(0, count)
     img1 = models.Session.query(models.Images)[rand1]
     img2 = models.Session.query(models.Images)[rand2]
     return img1.id, img2.id
+
 
 @app.route('/back', methods=['POST'])
 def back():
@@ -61,6 +64,13 @@ def back():
     response = make_response(json.dumps({'img1': img1, 'img2': img2}))
     response.set_cookie('user_id', str(user.id))
     return response
+
+
+@app.route('/top', methods=['GET'])
+def top():
+    images = models.Session.query(models.Images)\
+        .order_by(models.Images.elo.desc()).limit(10)
+    return json.dumps([img.id for img in images])
 
 @app.route('/')
 def index():
