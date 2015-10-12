@@ -56,6 +56,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </head>
 
 <body unresolved class="fullbleed layout vertical">
+  <more-routing-config driver="path"></more-routing-config>
+  <more-route name="match" path="/"></more-route>
+  <more-route name="top" path="/top10"></more-route>
+
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
 
@@ -78,17 +82,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </paper-toolbar>
 
         <!-- Main Content -->
-        <div class="content layout horizontal wrap">
+        <div>
+          <more-route-selector>
+            <iron-pages>
+              <section class="content layout horizontal wrap" route="match">
+                <paper-material onclick="document.getElementsByTagName('iron-a11y-keys')[0].fire('keys-pressed', {combo: 'left'})">
+                  <iron-image src={{img1}} style='height: 100%; width: 100%; background-color: lightgray;' preload fade sizing="cover"></iron-image>
+                </paper-material>
 
-          <paper-material onclick="document.getElementsByTagName('iron-a11y-keys')[0].fire('keys-pressed', {combo: 'left'})">
-            <iron-image src={{img1}} style='height: 100%; width: 100%; background-color: lightgray;' preload fade sizing="cover"></iron-image>
-          </paper-material>
+                <paper-material onclick="document.getElementsByTagName('iron-a11y-keys')[0].fire('keys-pressed', {combo: 'right'})">
+                  <iron-image src={{img2}} style='height: 100%; width: 100%; background-color: lightgray;' preload fade sizing="cover"></iron-image>
+                </paper-material>
 
-          <paper-material onclick="document.getElementsByTagName('iron-a11y-keys')[0].fire('keys-pressed', {combo: 'right'})">
-            <iron-image src={{img2}} style='height: 100%; width: 100%; background-color: lightgray;' preload fade sizing="cover"></iron-image>
-          </paper-material>
-
-          <left-right url="/back" img1={{img1}} img2={{img2}}></left-right>
+                <left-right url="/back" img1={{img1}} img2={{img2}}></left-right>
+              </section>
+              <section class="content layout horizontal wrap" route="top">
+                <my-top></my-top>
+              </section>
+            </iron-pages>
+          </more-route-selector>
         </div>
       </paper-scroll-header-panel>
     </paper-drawer-panel>
