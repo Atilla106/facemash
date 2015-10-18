@@ -62,7 +62,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
-
       <paper-scroll-header-panel main condenses keep-condensed-header>
 
         <!-- Main Toolbar -->
@@ -95,6 +94,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </paper-material>
 
                 <left-right url="/back" img1={{img1}} img2={{img2}}></left-right>
+
+                <a href="/top10">
+                  <paper-fab style="position: fixed; right: 16px; bottom: 16px; z-index:1;" elevation="1" icon="favorite">
+                  </paper-fab>
+                </a>
               </section>
               <section class="content layout horizontal wrap" route="top">
                 <my-top></my-top>

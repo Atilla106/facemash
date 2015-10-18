@@ -76,5 +76,10 @@ def top():
 def index():
     return app.send_static_file('index.html')
 
+@app.route('/top10')
+def top10():
+    return app.send_static_file('index.html')
+
+
 if __name__ == '__main__':
     app.run()
