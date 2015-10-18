@@ -15,9 +15,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
       :host {
         display: block;
+        width: 100%;
+      }
+
+      paper-material {
+        margin: 16px 0;
+        width: 500px;
+      }
+
+      img {
+        height: auto;
+        max-width: 100%;
+        display: block;
+      }
+
+      span {
+        bottom: 0;
+        color: white;
+        font-size: 32px;
+        position: absolute;
+        right: 8px;
+        text-align: right;
       }
     </style>
-    <div>Hello from <span>{{foo}}</span></div>
+    <iron-ajax method="GET" auto url=[[url]] last-response={{response}} debounce-duration="300" content-type="application/json"></iron-ajax>
+    <div class="horizontal around-justified layout wrap">
+      <template is="dom-repeat" items="{{response}}">
+        <paper-material>
+          <div style="position: relative;">
+            <img src$={{_setUrl(item)}}></img>
+            <span>{{_addOne(index)}}</span>
+          </div>
+        </paper-material>
+      </template>
+    </div>
   </template>
   <script>
   (function() {
@@ -27,11 +58,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'my-top',
 
       properties: {
-        foo: {
+        url: {
           type: String,
-          value: 'my-top',
-          notify: true
+          value: '/top',
         }
+      },
+      _setUrl: function (id) {
+        return 'http://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-' + id + '.jpg';
+      },
+      _addOne: function (x) {
+        return x + 1;
       }
     });
   })();
