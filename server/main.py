@@ -62,7 +62,7 @@ def back():
 
     img1, img2 = get_random_images()
     response = make_response(json.dumps({'img1': img1, 'img2': img2}))
-    response.set_cookie('user_id', str(user.id))
+    response.set_cookie('user_id', str(user.id), max_age=3600 * 24 * 365)
     return response
 
 
