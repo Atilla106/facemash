@@ -1,5 +1,5 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine, Column, Integer, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, ForeignKey, String
 from sqlalchemy.orm import sessionmaker
 
 import os
@@ -15,6 +15,7 @@ class Users(_Base):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
+    token = Column(String)
 
 class Images(_Base):
     __tablename__ = 'images'
