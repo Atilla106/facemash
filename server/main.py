@@ -6,6 +6,7 @@ from flask import Flask
 from flask import request, make_response
 
 import models
+import uuid
 
 app = Flask(__name__, static_folder='../dist', static_path='')
 
@@ -24,15 +25,19 @@ def elo(winner_elo, loser_elo):
     return winner_elo, loser_elo
 
 
-def update_score(winner, loser, userid):
-    winner = models.Session.query(models.Images).get(winner)
-    loser = models.Session.query(models.Images).get(loser)
+def update_score(winner, loser, userid, commit=True):
+    if type(winner) == int and type(loser) == int:
+        winner = models.Session.query(models.Images).get(winner)
+        loser = models.Session.query(models.Images).get(loser)
 
     winner.elo, loser.elo = elo(winner.elo, loser.elo)
-    match = models.Matches(user=userid, winner=winner.id, loser=loser.id)
+    if commit:  # Only add a match if we commit the changes
+        match = models.Matches(user=userid, winner=winner.id, loser=loser.id)
+        models.Session.add(match)
 
-    models.Session.add_all([winner, loser, match])
-    models.Session.commit()
+    models.Session.add_all([winner, loser])
+    if commit:
+        models.Session.commit()
 
 
 def get_random_images():
@@ -41,6 +46,21 @@ def get_random_images():
     img1 = models.Session.query(models.Images)[rand1]
     img2 = models.Session.query(models.Images)[rand2]
     return img1.id, img2.id
+
+def remove(userid):
+    models.Session.query(models.Matches).\
+        filter(models.Matches.user==userid).delete()
+    models.Session.commit()
+
+def recalculate():
+    images = models.Session.query(models.Images).all()
+    images = {img.id: img for img in images}
+    for img in images.values():
+        img.elo = 1000
+    for match in models.Session.query(models.Matches).all():
+        update_score(images[match.winner], images[match.loser],
+            userid=None, commit=False)
+    models.Session.commit()
 
 
 @app.route('/back', methods=['POST'])
@@ -57,11 +77,23 @@ def back():
     if request.method == 'POST' and request.json:
         winner = request.json.get('winner')
         loser = request.json.get('loser')
+        token = request.json.get('token')
         if winner and loser:
-            update_score(winner, loser, user.id)
+            if token and token == user.token:
+                update_score(winner, loser, user.id)
+                print("lol")
+            else:
+                response = make_response('Error: invalid token')
+                response.status_code = 403
+                return response
 
     img1, img2 = get_random_images()
-    response = make_response(json.dumps({'img1': img1, 'img2': img2}))
+    user.token = uuid.uuid4().hex
+    models.Session.add(user)
+    models.Session.commit()
+
+    payload = {'img1': img1, 'img2': img2, 'token': user.token}
+    response = make_response(json.dumps(payload))
     response.set_cookie('user_id', str(user.id), max_age=3600 * 24 * 365)
     return response
 
